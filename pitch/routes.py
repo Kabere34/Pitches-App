@@ -64,9 +64,14 @@ def logout():
   logout_user()
   return redirect(url_for('home'))
 
-@app.route("/account")
+@app.route("/account",methods=['GET','POST'])
 @login_required
 def account():
   form=UpdateAccountForm()
+  if form.validate_on_submit():
+    current_user.username=form.username.data
+    current_user.email=form.email.data
+
+
   image_file = url_for('static',  filename='images/'+ current_user.image_file)
   return render_template('account.html',title='Account', image_file=image_file,form=form)
