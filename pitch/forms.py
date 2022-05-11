@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField,PasswordField,SubmitField,BooleanField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,SelectField,TextAreaField
 from wtforms.validators import DataRequired, Length,Email,EqualTo,ValidationError
 from pitch.models import User
 
@@ -50,3 +50,11 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('That username is taken. Please choose a different one.')
+
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    category = SelectField('Pitch Category', choices=[('Business','Business'),('Finance','Finance'),('Relationships','Relationships'),('Well-Being','Well-Being')],validators=[DataRequired()])
+
+    submit = SubmitField('Post')

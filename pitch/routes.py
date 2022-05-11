@@ -3,28 +3,16 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash,redirect,request
 from pitch import app, db, bcrypt
-from pitch.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from pitch.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from pitch.models import User, Post
 from flask_login import login_user, current_user, logout_user,login_required
 
-posts=[
-  {
-    'author': 'John',
-    'title':'blog post',
-    'content':'First post',
-    'date_posted':'April 14, 2014',
-  },
-  {
-    'author': 'Jane',
-    'title':'video post',
-    'content':'Second post',
-    'date_posted':'July 14, 2015',
-  }
-]
+
 
 @app.route("/")
 def home():
-    return render_template('index.html',posts=posts)
+  posts=Post.query.all()
+  return render_template('index.html',posts=posts)
 
 @app.route("/pickup")
 def about():
@@ -102,7 +90,16 @@ def account():
   return render_template('account.html',title='Account', image_file=image_file,form=form)
 
 
-@app.route("/post/new")
+@app.route("/post/new", methods=['GET','POST'])
 @login_required
 def new_post():
-   return render_template('create_post.html',title='New Post')
+  form=PostForm()
+  if form.validate_on_submit():
+    post = Post(title=form.title.data, content=form.content.data,
+    category=form.category.data,
+    author=current_user)
+    db.session.add(post)
+    db.session.commit()
+    flash('Your post has been created!', 'success')
+    return redirect(url_for('home'))
+  return render_template('create_post.html',title='New Post',form=form)
