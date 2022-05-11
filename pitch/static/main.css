@@ -1,7 +1,8 @@
 body {
-   background-color:#fafafa;
+  background-color:#87846e51;
   color: #333333;
   margin-top: 5rem;
+
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -36,6 +37,14 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+a.article-title {
+  text-decoration-color: rgb(234, 205, 120);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+}
+.fas{
+  color: #Cd7a00;
+}
 a.article-title:hover {
   color: #428bca;
   text-decoration: none;
